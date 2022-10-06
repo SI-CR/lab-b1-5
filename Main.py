@@ -26,11 +26,15 @@ class XMLHandler(xml.sax.ContentHandler):
                     print("Node...")
                     key = attrs["key"]
                     print("\tKey:", key)
-                elif stack.index("Edge") == 0:
-                    print("Edge...")
-                    key = attrs["key"]
-                    print("\tKey:", key)
+                
             except ValueError:
+                try:
+                    if stack.index("Edge") == 0:
+                        print("Edge...")
+                        key = attrs["key"]
+                        print("\tKey:", key)
+                except ValueError:
+                    pass
                 pass
 
         if tag == "edge":
