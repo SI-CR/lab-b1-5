@@ -8,13 +8,10 @@ stack = []
 nodes = []
 edges = []
 
-
 class XMLHandler(xml.sax.ContentHandler):
     def __init__(self):
         self.CurrentData = ""
         self.data = ""
-    
-        
 
     def startElement(self, tag, attrs):
         self.CurrentData = tag
@@ -26,28 +23,31 @@ class XMLHandler(xml.sax.ContentHandler):
         if tag == "data":
             try:
                 if stack.index("Nodo") == 0:
-                    print("    ---DATA---")
+                    print("Node...")
                     key = attrs["key"]
-                    print("    Key:",key)
+                    print("\tKey:", key)
+                elif stack.index("Edge") == 0:
+                    print("Edge...")
+                    key = attrs["key"]
+                    print("\tKey:", key)
             except ValueError:
-                pass 
-                
-        elif tag == "edge":
+                pass
+
+        if tag == "edge":
             print("---EDGE---")
             source = attrs["source"]
             target = attrs["target"]
             id = attrs["id"]
+            stack.append("Edge")
             print("Source:", source, "Target:", target, "Id:", id)
 
     def endElement(self, tag):
-        if tag == "node":
-            print("Data:", self.data)
-            
-            self.data = ""
-        # if self.CurrentData == "data":
-        #     print("Data:", self.data)
+        if tag == "node" or tag == "edge":
+            stack.clear()
+        if self.CurrentData == "data":
+            print("\t\tData:", self.data)
 
-        # self.CurrentData = ""
+        self.CurrentData = ""
 
     def characters(self, content):
         if self.CurrentData == "data":
