@@ -9,18 +9,37 @@ class Graph:
 
 
 class Node:
-    def __init__(self, id,data):
+    def __init__(self, id,osm_id,lon,lat):
         self.id = id
-        self.data = data
+        self.osm_id = osm_id
+        self.lon = lon
+        self.lat = lat
 
 
 class Edge:
-    def __init__(self, id, source, target):
+    def __init__(self, id, source, target,long):
         self.id = id
         self.source = source
         self.target = target
+        self.long = long
+        
 
 
 class Matrix:
     def __init__(self, matrix):
         self.matrix = matrix
+       
+        
+    def crearNodo(idNodo, edge,lista):
+        
+        lista.clear()
+        for i in range(0, len(edge)):
+            if edge[i].source == idNodo:
+                lista.append(edge[i].target)
+            
+        
+            
+                
+               
+        
+        
