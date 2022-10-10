@@ -67,7 +67,10 @@ class XMLHandler(xml.sax.ContentHandler):
             for i in range(0, len(stack)):
 
                 if stack[i] == "d4":
-                    osm_idActual = stack[i+1]
+                    cadena = stack[i + 1]
+                    cadenaFinal = cadena[1:len(cadena) - 1]
+                    cadenaFinal = cadenaFinal.split(", ")
+                    osm_idActual = cadenaFinal
                 if stack[i] == "d8":
                     lonActual = stack[i+1]
                 if stack[i] == "d9":
@@ -121,6 +124,8 @@ class XMLHandler(xml.sax.ContentHandler):
         XMLHandler.crearMatriz(nodes, edges)
         for i in range(0, len(listadelistas)):
             print("Id:", nodes[i].id, "Lista Adyacencia -> ", listadelistas[i])
+        for i in range(0, len(listadelistas)):
+            print("osm_id:", nodes[i].osm_id, "Lista Adyacencia -> ", listadelistas[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, listadelistas)
 
 
