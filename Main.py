@@ -7,8 +7,8 @@ import Graph
 stack = []
 nodes = []
 edges = []
-matrices = []
-listadelistas = []
+matrixes = []
+adjacencyList = []
 
 
 class XMLHandler(xml.sax.ContentHandler):
@@ -111,22 +111,21 @@ class XMLHandler(xml.sax.ContentHandler):
 
     def crearMatriz(nodes, edges):
         for i in range(0, len(nodes)):
-            Graph.Matrix.crearNodo(nodes[i].id, edges, matrices)
-            listadelistas.append(matrices.copy())
+            Graph.Matrix.crearNodo(nodes[i].id, edges, matrixes)
+            adjacencyList.append(matrixes.copy())
 
     def main():
         parseador = xml.sax.make_parser()
         manejador = XMLHandler()
         parseador.setContentHandler(manejador)
-        ruta = "/home/oem/Desktop/Universidad/LabInteligentes/Parte1/CR_Capital.graphML"
+        ruta = "lab-b1-5/Grafos/CR_Capital.graphML"
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
-        for i in range(0, len(listadelistas)):
-            print("Id:", nodes[i].id, "Lista Adyacencia -> ", listadelistas[i])
-        for i in range(0, len(listadelistas)):
-            print("osm_id:", nodes[i].osm_id, "Lista Adyacencia -> ", listadelistas[i])
-        grafo = Graph.Graph("Grafo Ciu", nodes, edges, listadelistas)
+        for i in range(0, len(adjacencyList)):
+            print("Id:", nodes[i].id, "Lista Adyacencia -> ", adjacencyList[i])
+        grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
+        
 
 
 if (__name__ == "__main__"):
