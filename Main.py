@@ -42,7 +42,7 @@ class XMLHandler(xml.sax.ContentHandler):
                 pass
 
         if tag == "edge":
-            
+
             source = attrs["source"]
             target = attrs["target"]
             id = attrs["id"]
@@ -50,7 +50,6 @@ class XMLHandler(xml.sax.ContentHandler):
             stack.append(id)
             stack.append(source)
             stack.append(target)
-          
 
     def endElement(self, tag):
         idEdgeActual = ""
@@ -125,7 +124,6 @@ class XMLHandler(xml.sax.ContentHandler):
         for i in range(0, len(adjacencyList)):
             print("Id:", nodes[i].id, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
-        
 
 
 if (__name__ == "__main__"):
