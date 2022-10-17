@@ -4,6 +4,7 @@ import xml.sax
 import xml.sax.handler
 import Graph
 
+# Definimos una serie de listas vacías.
 stack = []
 nodes = []
 edges = []
@@ -17,32 +18,23 @@ class XMLHandler(xml.sax.ContentHandler):
         self.data = ""
 
     def startElement(self, tag, attrs):
+        """Resumen : Metodo que se ejecuta cuando se encuentra un elemento
+
+        Args:
+            tag (String): Nos dice si es un nodo, edge o data
+            attrs (String): Atributos que contiene el elemento
+        """
         self.CurrentData = tag
         if tag == "node":
 
+            stack.clear()
             nodeId = attrs["id"]
             stack.append("Nodo")
             stack.append(nodeId)
 
-        if tag == "data":
-            try:
-                if stack.index("Nodo") == 0:
-                    key = attrs["key"]
-                    stack.append(key)
-
-            except ValueError:
-                try:
-                    if stack.index("Edge") == 0:
-                        # print("Edge...")
-                        key = attrs["key"]
-                        stack.append(key)
-                        # print("\tKey:", key)
-                except ValueError:
-                    pass
-                pass
-
         if tag == "edge":
 
+            stack.clear()
             source = attrs["source"]
             target = attrs["target"]
             id = attrs["id"]
@@ -51,33 +43,66 @@ class XMLHandler(xml.sax.ContentHandler):
             stack.append(source)
             stack.append(target)
 
+        if tag == "data":
+
+            key = attrs["key"]
+            stack.append(key)
+
+            # try:
+            #     if stack.index("Nodo") == 0:
+            #         key = attrs["key"]
+            #         stack.append(key)
+
+            # except ValueError:
+            #     try:
+            #         if stack.index("Edge") == 0:
+
+            #             key = attrs["key"]
+            #             stack.append(key)
+
+            #     except ValueError:
+            #         pass
+            #     pass
+
     def endElement(self, tag):
-        idEdgeActual = ""
-        idSourceActual = ""
-        idTargetActual = ""
-        idActual = ""
-        lonActual = ""
-        latActual = ""
-        osm_idActual = ""
+        """Lee la etiqueta de cierre y elimina los elementos de la pila si se ha creado ya el objeto.
+
+        Args:
+            tag (String): Identifica si es el cierre de un nodo, edge o data
+        """
+
+        # Definición de variables.
+
         edgeLengthActual = ""
 
         if tag == "node":
+
+            lonActual = ""
+            latActual = ""
+            osm_idActual = ""
             idActual = stack[1]
             for i in range(0, len(stack)):
 
                 if stack[i] == "d4":
                     cadena = stack[i + 1]
-                    cadenaFinal = cadena[1:len(cadena) - 1]
-                    cadenaFinal = cadenaFinal.split(", ")
-                    osm_idActual = cadenaFinal
+                    if cadena[0] == "[":
+
+                        cadenaFinal = cadena[1:len(cadena) - 1]
+                        cadenaFinal = cadenaFinal.split(", ")
+                        cadena = cadenaFinal
+                    osm_idActual = cadena
                 if stack[i] == "d8":
                     lonActual = stack[i+1]
                 if stack[i] == "d9":
                     latActual = stack[i+1]
             nodo = Graph.Node(idActual, osm_idActual, lonActual, latActual)
             nodes.append(nodo)
+
             stack.clear()
         if tag == "edge":
+            # idEdgeActual = ""
+            # idSourceActual = ""
+            # idTargetActual = ""
             idEdgeActual = stack[1]
             idSourceActual = stack[2]
             idTargetActual = stack[3]
@@ -95,18 +120,22 @@ class XMLHandler(xml.sax.ContentHandler):
 
     def characters(self, content):
         if self.CurrentData == "data":
-            try:
-                if stack.index("Nodo") == 0:
-                    self.data = content
-                    stack.append(content)
-            except ValueError:
-                try:
-                    if stack.index("Edge") == 0:
-                        self.data = content
-                        stack.append(content)
-                except ValueError:
-                    pass
-                pass
+
+            self.data = content
+            stack.append(content)
+
+            # try:
+            #     if stack.index("Nodo") == 0:
+            #         self.data = content
+            #         stack.append(content)
+            # except ValueError:
+            #     try:
+            #         if stack.index("Edge") == 0:
+            #             self.data = content
+            #             stack.append(content)
+            #     except ValueError:
+            #         pass
+            #     pass
 
     def crearMatriz(nodes, edges):
         for i in range(0, len(nodes)):
@@ -117,7 +146,7 @@ class XMLHandler(xml.sax.ContentHandler):
         parseador = xml.sax.make_parser()
         manejador = XMLHandler()
         parseador.setContentHandler(manejador)
-        ruta = "lab-b1-5/Grafos/CR_Capital.graphML"
+        ruta = "LabGitHub/lab-b1-5/Grafos/CR_Capital.graphML"
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
