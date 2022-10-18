@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import Estado
 import xml.sax
 import xml.sax.handler
 import Graph
@@ -74,8 +75,6 @@ class XMLHandler(xml.sax.ContentHandler):
 
         # Definición de variables.
 
-        
-
         if tag == "node":
 
             lonActual = ""
@@ -108,16 +107,16 @@ class XMLHandler(xml.sax.ContentHandler):
             idEdgeActual = stack[1]
             idSourceActual = stack[2]
             idTargetActual = stack[3]
-            
+
             if idEdgeActual != "1":
-                
+
                 for i in range(0, len(stack)):
 
                     if stack[i] == "d17":
                         edgeLengthActual = stack[i+1]
                         break
                 edge = Graph.Edge(idEdgeActual, idSourceActual,
-                              idTargetActual, edgeLengthActual)
+                                  idTargetActual, edgeLengthActual)
                 edges.append(edge)
                 stack.clear()
 
@@ -156,7 +155,7 @@ class XMLHandler(xml.sax.ContentHandler):
         """
         for i in range(0, len(nodes)):
             Graph.Matrix.crearNodo(nodes[i].id, edges, matrixes)
-            
+
             adjacencyList.append(matrixes.copy())
 
     def main():
@@ -169,18 +168,25 @@ class XMLHandler(xml.sax.ContentHandler):
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
-        
-        grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
-        
+
+        # grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
+
         for i in range(0, len(adjacencyList)):
             print("Id:", nodes[i].id, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
+        lista = ["60", "30", "40"]
+        estado = Estado.Estado("1314", lista)
+        bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
+        if bool:
+            string = estado.crear_string(estado.id_node, estado.nodes_to_visit)
+            id = estado.convert_to_md5(string)
+            print("Muy bien hermoso")
+        else:
+            print("No se puede crear el estado, nodos incorrectos")
+
         # for i in range(0,len(grafo.nodes)):
         #     print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
 
 
 if (__name__ == "__main__"):
     XMLHandler.main()
-    
-    
-    
