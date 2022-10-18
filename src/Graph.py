@@ -35,7 +35,8 @@ class Matrix:
         lista.clear()
         for i in range(0, len(edge)):
             if edge[i].source == idNodo:
-                lista.append(edge[i].target)
+                lista.append(int(edge[i].target))
+        lista.sort()
             
         
             

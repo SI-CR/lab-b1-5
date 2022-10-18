@@ -4,6 +4,7 @@ import xml.sax
 import xml.sax.handler
 import Graph
 
+
 # Definimos una serie de listas vacías.
 stack = []
 nodes = []
@@ -73,7 +74,7 @@ class XMLHandler(xml.sax.ContentHandler):
 
         # Definición de variables.
 
-        edgeLengthActual = ""
+        
 
         if tag == "node":
 
@@ -103,6 +104,7 @@ class XMLHandler(xml.sax.ContentHandler):
             # idEdgeActual = ""
             # idSourceActual = ""
             # idTargetActual = ""
+            edgeLengthActual = ""
             idEdgeActual = stack[1]
             idSourceActual = stack[2]
             idTargetActual = stack[3]
@@ -146,11 +148,12 @@ class XMLHandler(xml.sax.ContentHandler):
         """Crea la lista de adyacencia
 
         Args:
-            nodes (Node): Una lista de nodos
-            edges (Edge): Una lista de edges
+            nodes (Node -> List): Una lista de nodos
+            edges (Edge -> List): Una lista de edges
         """
         for i in range(0, len(nodes)):
             Graph.Matrix.crearNodo(nodes[i].id, edges, matrixes)
+            
             adjacencyList.append(matrixes.copy())
 
     def main():
@@ -163,13 +166,18 @@ class XMLHandler(xml.sax.ContentHandler):
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
+        
         grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
-        # for i in range(0, len(adjacencyList)):
-        #     print("Id:", nodes[i].id, "Lista Adyacencia -> ", adjacencyList[i])
-        # grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
+        
+        for i in range(0, len(adjacencyList)):
+            print("Id:", nodes[i].id, "Lista Adyacencia -> ", adjacencyList[i])
+        grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
         # for i in range(0,len(grafo.nodes)):
         #     print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
 
 
 if (__name__ == "__main__"):
     XMLHandler.main()
+    
+    
+    
