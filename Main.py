@@ -163,9 +163,12 @@ class XMLHandler(xml.sax.ContentHandler):
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
-        for i in range(0, len(adjacencyList)):
-            print("Id:", nodes[i].id, "Lista Adyacencia -> ", adjacencyList[i])
-        grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
+        grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
+        # for i in range(0, len(adjacencyList)):
+        #     print("Id:", nodes[i].id, "Lista Adyacencia -> ", adjacencyList[i])
+        # grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
+        # for i in range(0,len(grafo.nodes)):
+        #     print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
 
 
 if (__name__ == "__main__"):
