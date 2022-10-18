@@ -108,17 +108,20 @@ class XMLHandler(xml.sax.ContentHandler):
             idEdgeActual = stack[1]
             idSourceActual = stack[2]
             idTargetActual = stack[3]
-            for i in range(0, len(stack)):
+            
+            if idEdgeActual != "1":
+                
+                for i in range(0, len(stack)):
 
-                if stack[i] == "d17":
-                    edgeLengthActual = stack[i+1]
-                    break
-            edge = Graph.Edge(idEdgeActual, idSourceActual,
+                    if stack[i] == "d17":
+                        edgeLengthActual = stack[i+1]
+                        break
+                edge = Graph.Edge(idEdgeActual, idSourceActual,
                               idTargetActual, edgeLengthActual)
-            edges.append(edge)
-            stack.clear()
+                edges.append(edge)
+                stack.clear()
 
-        self.CurrentData = ""
+            self.CurrentData = ""
 
     def characters(self, content):
         """Lee el contenido que va dentro de las etiquetas
