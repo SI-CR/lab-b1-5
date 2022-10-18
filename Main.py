@@ -119,6 +119,11 @@ class XMLHandler(xml.sax.ContentHandler):
         self.CurrentData = ""
 
     def characters(self, content):
+        """Lee el contenido que va dentro de las etiquetas
+
+        Args:
+            content (Datos(Lee Strings y luego lo convertiremos al tipo que toca)): Datos que tiene cada clave.
+        """
         if self.CurrentData == "data":
 
             self.data = content
@@ -138,11 +143,19 @@ class XMLHandler(xml.sax.ContentHandler):
             #     pass
 
     def crearMatriz(nodes, edges):
+        """Crea la lista de adyacencia
+
+        Args:
+            nodes (Node): Una lista de nodos
+            edges (Edge): Una lista de edges
+        """
         for i in range(0, len(nodes)):
             Graph.Matrix.crearNodo(nodes[i].id, edges, matrixes)
             adjacencyList.append(matrixes.copy())
 
     def main():
+        """Función que ejecuta el método principal main()
+        """
         parseador = xml.sax.make_parser()
         manejador = XMLHandler()
         parseador.setContentHandler(manejador)
