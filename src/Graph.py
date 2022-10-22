@@ -24,11 +24,9 @@ class Edge:
         self.long = long
         
 
-
 class Matrix:
     def __init__(self, matrix):
         self.matrix = matrix
-       
         
     def crearNodo(idNodo, edge,lista):
         

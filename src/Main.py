@@ -50,22 +50,6 @@ class XMLHandler(xml.sax.ContentHandler):
             key = attrs["key"]
             stack.append(key)
 
-            # try:
-            #     if stack.index("Nodo") == 0:
-            #         key = attrs["key"]
-            #         stack.append(key)
-
-            # except ValueError:
-            #     try:
-            #         if stack.index("Edge") == 0:
-
-            #             key = attrs["key"]
-            #             stack.append(key)
-
-            #     except ValueError:
-            #         pass
-            #     pass
-
     def endElement(self, tag):
         """Lee la etiqueta de cierre y elimina los elementos de la pila si se ha creado ya el objeto.
 
@@ -100,9 +84,7 @@ class XMLHandler(xml.sax.ContentHandler):
 
             stack.clear()
         if tag == "edge":
-            # idEdgeActual = ""
-            # idSourceActual = ""
-            # idTargetActual = ""
+
             edgeLengthActual = ""
             idEdgeActual = stack[1]
             idSourceActual = stack[2]
@@ -132,19 +114,6 @@ class XMLHandler(xml.sax.ContentHandler):
 
             self.data = content
             stack.append(content)
-
-            # try:
-            #     if stack.index("Nodo") == 0:
-            #         self.data = content
-            #         stack.append(content)
-            # except ValueError:
-            #     try:
-            #         if stack.index("Edge") == 0:
-            #             self.data = content
-            #             stack.append(content)
-            #     except ValueError:
-            #         pass
-            #     pass
 
     def crearMatriz(nodes, edges):
         """Crea la lista de adyacencia
