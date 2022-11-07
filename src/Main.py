@@ -133,7 +133,7 @@ class XMLHandler(xml.sax.ContentHandler):
         parseador = xml.sax.make_parser()
         manejador = XMLHandler()
         parseador.setContentHandler(manejador)
-        ruta = "LabGitHub/lab-b1-5/Grafos/CR_Capital.graphML"
+        ruta = "/home/oem/Desktop/Universidad/LabInteligentes/LabGitHub/lab-b1-5/Grafos/CR_Capital.graphML"
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
@@ -141,17 +141,27 @@ class XMLHandler(xml.sax.ContentHandler):
         # grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
 
         for i in range(0, len(adjacencyList)):
-            print("Id:", nodes[i].id, "Lista Adyacencia -> ", adjacencyList[i])
+            print("Id:", nodes[i].id, nodes[i].osm_id, nodes[i].lon,
+                  nodes[i].lat, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
-        lista = ["60", "30", "40"]
-        estado = Estado.Estado("1314", lista)
+        lista = [40,11,50,1194]
+        idInicial = "2"
+        estado = Estado.Estado(idInicial, lista,grafo)
         bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
+        
         if bool:
             string = estado.crear_string(estado.id_node, estado.nodes_to_visit)
             id = estado.convert_to_md5(string)
-            print("Muy bien hermoso")
+            print("Correcto.")
         else:
-            print("No se puede crear el estado, nodos incorrectos")
+            print("No se puede crear el estado, nodos incorrectos.")
+        
+        estado.f_sucesor(idInicial, lista)
+        md5 = estado.convert_to_md5(string)
+        print(md5)
+        print(estado.__str__())
+        
+        
 
         # for i in range(0,len(grafo.nodes)):
         #     print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
