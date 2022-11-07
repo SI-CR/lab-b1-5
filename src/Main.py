@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import Estado
 import xml.sax
 import xml.sax.handler
 import Graph
@@ -49,22 +50,6 @@ class XMLHandler(xml.sax.ContentHandler):
             key = attrs["key"]
             stack.append(key)
 
-            # try:
-            #     if stack.index("Nodo") == 0:
-            #         key = attrs["key"]
-            #         stack.append(key)
-
-            # except ValueError:
-            #     try:
-            #         if stack.index("Edge") == 0:
-
-            #             key = attrs["key"]
-            #             stack.append(key)
-
-            #     except ValueError:
-            #         pass
-            #     pass
-
     def endElement(self, tag):
         """Lee la etiqueta de cierre y elimina los elementos de la pila si se ha creado ya el objeto.
 
@@ -73,8 +58,6 @@ class XMLHandler(xml.sax.ContentHandler):
         """
 
         # Definición de variables.
-
-        
 
         if tag == "node":
 
@@ -101,23 +84,21 @@ class XMLHandler(xml.sax.ContentHandler):
 
             stack.clear()
         if tag == "edge":
-            # idEdgeActual = ""
-            # idSourceActual = ""
-            # idTargetActual = ""
+
             edgeLengthActual = ""
             idEdgeActual = stack[1]
             idSourceActual = stack[2]
             idTargetActual = stack[3]
-            
+
             if idEdgeActual != "1":
-                
+
                 for i in range(0, len(stack)):
 
                     if stack[i] == "d17":
                         edgeLengthActual = stack[i+1]
                         break
                 edge = Graph.Edge(idEdgeActual, idSourceActual,
-                              idTargetActual, edgeLengthActual)
+                                  idTargetActual, edgeLengthActual)
                 edges.append(edge)
                 stack.clear()
 
@@ -134,19 +115,6 @@ class XMLHandler(xml.sax.ContentHandler):
             self.data = content
             stack.append(content)
 
-            # try:
-            #     if stack.index("Nodo") == 0:
-            #         self.data = content
-            #         stack.append(content)
-            # except ValueError:
-            #     try:
-            #         if stack.index("Edge") == 0:
-            #             self.data = content
-            #             stack.append(content)
-            #     except ValueError:
-            #         pass
-            #     pass
-
     def crearMatriz(nodes, edges):
         """Crea la lista de adyacencia
 
@@ -156,7 +124,7 @@ class XMLHandler(xml.sax.ContentHandler):
         """
         for i in range(0, len(nodes)):
             Graph.Matrix.crearNodo(nodes[i].id, edges, matrixes)
-            
+
             adjacencyList.append(matrixes.copy())
 
     def main():
@@ -165,22 +133,39 @@ class XMLHandler(xml.sax.ContentHandler):
         parseador = xml.sax.make_parser()
         manejador = XMLHandler()
         parseador.setContentHandler(manejador)
-        ruta = "LabGitHub/lab-b1-5/Grafos/CR_Capital.graphML"
+        ruta = "/home/oem/Desktop/Universidad/LabInteligentes/LabGitHub/lab-b1-5/Grafos/CR_Capital.graphML"
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
-        
-        grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
-        
+
+        # grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
+
         for i in range(0, len(adjacencyList)):
-            print("Id:", nodes[i].id, "Lista Adyacencia -> ", adjacencyList[i])
+            print("Id:", nodes[i].id, nodes[i].osm_id, nodes[i].lon,
+                  nodes[i].lat, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
+        lista = [40,11,50,1194]
+        idInicial = "2"
+        estado = Estado.Estado(idInicial, lista,grafo)
+        bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
+        
+        if bool:
+            string = estado.crear_string(estado.id_node, estado.nodes_to_visit)
+            id = estado.convert_to_md5(string)
+            print("Correcto.")
+        else:
+            print("No se puede crear el estado, nodos incorrectos.")
+        
+        estado.f_sucesor(idInicial, lista)
+        md5 = estado.convert_to_md5(string)
+        print(md5)
+        print(estado.__str__())
+        
+        
+
         # for i in range(0,len(grafo.nodes)):
         #     print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
 
 
 if (__name__ == "__main__"):
     XMLHandler.main()
-    
-    
-    
