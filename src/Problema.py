@@ -7,3 +7,5 @@ def __init__(self, name, ini_state, goal_state, graph):
     self.goal_state = goal_state
     self.graph = graph
     
+def goal_state(self, estado):
+        return True if len(estado.lista) == 0 else False

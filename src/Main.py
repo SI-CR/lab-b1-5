@@ -4,6 +4,7 @@ import Estado
 import xml.sax
 import xml.sax.handler
 import Graph
+import NodosArbol
 
 
 # Definimos una serie de listas vacías.
@@ -140,32 +141,36 @@ class XMLHandler(xml.sax.ContentHandler):
 
         # grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
 
-        for i in range(0, len(adjacencyList)):
-            print("Id:", nodes[i].id, nodes[i].osm_id, nodes[i].lon,
-                  nodes[i].lat, "Lista Adyacencia -> ", adjacencyList[i])
+        # for i in range(0, len(adjacencyList)):
+        #     print("Id:", nodes[i].id, nodes[i].osm_id, nodes[i].lon,
+        #           nodes[i].lat, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
-        lista = [40,11,50,1194]
-        idInicial = "2"
-        estado = Estado.Estado(idInicial, lista,grafo)
-        bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
         
+        lista = [40, 11, 50, 1194]
+        idInicial = "123"
+        estado = Estado.Estado(idInicial, lista, grafo)
+        bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
+
         if bool:
             string = estado.crear_string(estado.id_node, estado.nodes_to_visit)
             id = estado.convert_to_md5(string)
             print("Correcto.")
         else:
             print("No se puede crear el estado, nodos incorrectos.")
-        
+
         estado.f_sucesor(idInicial, lista)
         md5 = estado.convert_to_md5(string)
         print(md5)
         print(estado.__str__())
-        
-        
 
         # for i in range(0,len(grafo.nodes)):
         #     print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
 
+        
+        nodo = NodosArbol.NodosArbol(0,"pais",estado,0,0, "su papi muñaño", 0, 0)
+        nodo.path()
+            
+    
 
 if (__name__ == "__main__"):
     XMLHandler.main()

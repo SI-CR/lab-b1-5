@@ -43,6 +43,7 @@ class Estado():
 
         string_nodos = ""
         lista_por_si_acaso = []
+        
         for i in range(0, len(nodos_nuevo_sucesor)):
             if nodos_nuevo_sucesor[i] in nodes_to_visit:
                 lista_por_si_acaso = nodes_to_visit.copy()
@@ -58,9 +59,6 @@ class Estado():
 
         return lista
 
-
-    def goal_state(self, estado, lista):
-        return True if len(lista) == 0 else False
-        
+     
     def __str__(self):
         return self.id_node + " " + str(self.nodes_to_visit)
