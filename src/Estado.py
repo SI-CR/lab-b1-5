@@ -2,12 +2,13 @@ import hashlib
 
 
 class Estado():
-
+#Meter aquí el grafo como variable de clase y actualizarlo
     def __init__(self, id_node, nodes_to_visit, grafo):
         self.grafo = grafo
         self.id_node = id_node
         nodes_to_visit.sort()
         self.nodes_to_visit = nodes_to_visit
+        self.sucesores = Estado.f_sucesor(self, id_node, nodes_to_visit)
 
     def convert_to_md5(self, string):
         id = hashlib.md5(string.encode()).hexdigest()

@@ -149,6 +149,7 @@ class XMLHandler(xml.sax.ContentHandler):
         lista = [40, 11, 50, 1194]
         idInicial = "123"
         estado = Estado.Estado(idInicial, lista, grafo)
+        estado2 = Estado.Estado(10,lista,grafo)
         bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
 
         if bool:
@@ -166,10 +167,14 @@ class XMLHandler(xml.sax.ContentHandler):
         # for i in range(0,len(grafo.nodes)):
         #     print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
 
-        
-        nodo = NodosArbol.NodosArbol(0,"pais",estado,0,0, "su papi muñaño", 0, 0)
-        nodo.path()
-            
+        nodo1 = NodosArbol.NodosArbol(None, estado, 0,0,None, 0, 0, "BFS")
+        nodo = NodosArbol.NodosArbol(nodo1, estado2, 0,0,None, 0, 0,"BFS" )
+        camino = nodo.path()
+        for i in range(0, len(camino)-1):
+            print(camino[i].id, end=" -> ")
+        print(camino[len(camino)-1].id)
+           
+        print()  
     
 
 if (__name__ == "__main__"):
