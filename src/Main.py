@@ -3,8 +3,11 @@
 import Estado
 import xml.sax
 import xml.sax.handler
+from Frontera import FronteraOrdenada
 import Graph
 import NodosArbol
+import Algoritmo
+from Problema import Problema
 
 
 # Definimos una serie de listas vacías.
@@ -76,9 +79,9 @@ class XMLHandler(xml.sax.ContentHandler):
                         cadenaFinal = cadenaFinal.split(", ")
                         cadena = cadenaFinal
                     osm_idActual = cadena
-                if stack[i] == "d8":
+                if stack[i] == "d5":
                     lonActual = stack[i+1]
-                if stack[i] == "d9":
+                if stack[i] == "d6":
                     latActual = stack[i+1]
             nodo = Graph.Node(idActual, osm_idActual, lonActual, latActual)
             nodes.append(nodo)
@@ -90,6 +93,9 @@ class XMLHandler(xml.sax.ContentHandler):
             idEdgeActual = stack[1]
             idSourceActual = stack[2]
             idTargetActual = stack[3]
+
+            # if idSourceAnterior == idSourceActual and idTargetAnterior == idTargetActual:
+            #     pass
 
             if idEdgeActual != "1":
 
@@ -145,37 +151,88 @@ class XMLHandler(xml.sax.ContentHandler):
         #     print("Id:", nodes[i].id, nodes[i].osm_id, nodes[i].lon,
         #           nodes[i].lat, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
-        
-        lista = [40, 11, 50, 1194]
-        idInicial = "123"
+
+        lista = [nodes[40], nodes[11], nodes[50], nodes[300]]
+        idInicial = nodes[2]
+        print("Id inicial: ", idInicial.id, idInicial.osm_id, idInicial.lon)
+        lista.sort(key=lambda x: int(x.id))
         estado = Estado.Estado(idInicial, lista, grafo)
-        estado2 = Estado.Estado(10,lista,grafo)
+        # estado2 = Estado.Estado(50, lista, grafo)
         bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
 
         if bool:
-            string = estado.crear_string(estado.id_node, estado.nodes_to_visit)
+            string = estado.crear_string(
+                estado.id_node.id, estado.nodes_to_visit)
+            print(string)
             id = estado.convert_to_md5(string)
-            print("Correcto.")
+            print(id)
         else:
             print("No se puede crear el estado, nodos incorrectos.")
 
-        estado.f_sucesor(idInicial, lista)
-        md5 = estado.convert_to_md5(string)
-        print(md5)
-        print(estado.__str__())
+        
+        # print("Sucesores: ", sucesores)
+        # md5 = estado.convert_to_md5(string)
+        # print(md5)
+        # print(estado.__str__())
 
         # for i in range(0,len(grafo.nodes)):
-        #     print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
+        #print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
 
-        nodo1 = NodosArbol.NodosArbol(None, estado, 0,0,None, 0, 0, "BFS")
-        nodo = NodosArbol.NodosArbol(nodo1, estado2, 0,0,None, 0, 0,"BFS" )
-        camino = nodo.path()
-        for i in range(0, len(camino)-1):
-            print(camino[i].id, end=" -> ")
-        print(camino[len(camino)-1].id)
-           
-        print()  
-    
+        # for i in range(0,len(edges)):
+        #     print(edges[i].id + " " + edges[i].source + " " + edges[i].target + " " )
+
+        # nodo1 = NodosArbol.NodosArbol(None, estado, 0, 0, None, 0, 0, "BFS")
+        # nodo = NodosArbol.NodosArbol(None, estado, 0, 0, None, 0, None, "BFS")
+        # nodo3 = NodosArbol.NodosArbol(nodo, estado, 0, 0, None, 0, 7, "BFS")
+
+        # front = FronteraOrdenada()
+
+        # front.insertar(nodo1, 10)
+        # front.insertar(nodo, 10)
+        # front.insertar(nodo3, 10)
+
+        # ola = []
+        nodo = None
+        for i in range(0, len(nodes)):
+            if estado.id_node == nodes[i].id:
+                nodo = nodes[i]
+                break
+            
+        nodoArbol = NodosArbol.NodosArbol(None, estado, 0, 0, None, 0, 0, "BFS")
+        # print(nodo.id, nodo.osm_id, nodo.lon, nodo.lat)
+        # estado.nodes_to_visit.sort(key=lambda x: int(x.id))
+        print(estado.id_node.id, end=" ")
+        for i in range(0, len(estado.nodes_to_visit)):
+            print(estado.nodes_to_visit[i].id, end=" ")
+        print()
+
+        # print(estado.id_node.id,estado.nodes_to_visit)
+        # ola = front.mostrar()
+
+        # for i in range(0, front.lista._qsize()):
+        #     print(front.lista.get(i).estado.id_node)
+
+        # camino = nodo.path()
+        # for i in range(0, len(camino)-1):
+        #     print(camino[i].id, end=" -> ")
+        # print(camino[len(camino)-1].id)
+
+        # print()
+
+        
+
+        pro = Problema("Soy un problema", estado, grafo)
+
+        algo = Algoritmo.Algoritmo("Algoritmo BFS", pro, "BFS")
+        algo.run()
+        # camino = algo.run(estado)
+        # if len(camino) == 0:
+        #     print("No hay solución.")
+        # else:
+        #     for i in range(0, len(camino)-1):
+        #         print(camino[i].id, end=" -> ")
+        #     print(camino[len(camino)-1].id)
+
 
 if (__name__ == "__main__"):
     XMLHandler.main()

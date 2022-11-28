@@ -2,19 +2,28 @@ import hashlib
 
 
 class Estado():
+    
 #Meter aquí el grafo como variable de clase y actualizarlo
     def __init__(self, id_node, nodes_to_visit, grafo):
         self.grafo = grafo
         self.id_node = id_node
-        nodes_to_visit.sort()
+        # nodes_to_visit.sort()
         self.nodes_to_visit = nodes_to_visit
-        self.sucesores = Estado.f_sucesor(self, id_node, nodes_to_visit)
+       
 
     def convert_to_md5(self, string):
         id = hashlib.md5(string.encode()).hexdigest()
         return id
 
     def crear_string(self, id_node, nodes_to_visit):
+        string_nodos = ""
+        for i in range(0, len(nodes_to_visit)-1):
+            string_nodos += str(nodes_to_visit[i].id) + ","
+        string_nodos += str(nodes_to_visit[len(nodes_to_visit)-1].id)
+        string = ("("+id_node+",["+string_nodos+"])").strip()
+        return string
+    
+    def crear_string_sucesores(self, id_node, nodes_to_visit):
         string_nodos = ""
         for i in range(0, len(nodes_to_visit)-1):
             string_nodos += str(nodes_to_visit[i]) + ","
@@ -24,11 +33,11 @@ class Estado():
 
     def check_nodes(self, id_node, nodes_to_visit, graph):
         boolean = True
-        if int(id_node) > len(graph.nodes)-1:
+        if int(id_node.id) > len(graph.nodes)-1:
             boolean = False
 
         for i in range(0, len(nodes_to_visit)):
-            if int(nodes_to_visit[i]) > len(graph.nodes) - 1:
+            if int(nodes_to_visit[i].id) > len(graph.nodes) - 1:
                 boolean = False
         return boolean
 
@@ -36,6 +45,10 @@ class Estado():
         lista = []
         list_ad = self.grafo.matrix
         nodos_nuevo_sucesor = []
+        lista_id = []
+        for i in range(0, len(nodes_to_visit)):
+            lista_id.append(int(nodes_to_visit[i].id))
+        
         for i in range(0, len(list_ad)):
             if id == str(i):
                 nodos_nuevo_sucesor = list_ad[i]
@@ -46,15 +59,15 @@ class Estado():
         lista_por_si_acaso = []
         
         for i in range(0, len(nodos_nuevo_sucesor)):
-            if nodos_nuevo_sucesor[i] in nodes_to_visit:
-                lista_por_si_acaso = nodes_to_visit.copy()
+            if nodos_nuevo_sucesor[i] in lista_id:
+                lista_por_si_acaso = lista_id.copy()
                 lista_por_si_acaso.remove(nodos_nuevo_sucesor[i])
-                string_nodos = Estado.crear_string(self, str(nodos_nuevo_sucesor[i]), lista_por_si_acaso)
+                string_nodos = Estado.crear_string_sucesores(self, str(nodos_nuevo_sucesor[i]), lista_por_si_acaso)
                 sucesor = "("+id+"->"+str(nodos_nuevo_sucesor[i])+"," + string_nodos + ",costo("+id+","+str(nodos_nuevo_sucesor[i])+"))"
                 lista.append(sucesor)
                 lista_por_si_acaso.clear()
             else:
-                string_nodos = Estado.crear_string(self, str(nodos_nuevo_sucesor[i]), nodes_to_visit)
+                string_nodos = Estado.crear_string_sucesores(self, str(nodos_nuevo_sucesor[i]), lista_id)
                 sucesor = "("+id+"->"+str(nodos_nuevo_sucesor[i])+"," + string_nodos +",costo("+id+","+str(nodos_nuevo_sucesor[i])+"))"
                 lista.append(sucesor)
 
@@ -62,4 +75,4 @@ class Estado():
 
      
     def __str__(self):
-        return self.id_node + " " + str(self.nodes_to_visit)
+        return str(self.id_node) + " " + str(self.nodes_to_visit)

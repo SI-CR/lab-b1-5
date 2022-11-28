@@ -1,9 +1,9 @@
 class Visitados:
     def __init__(self):
-        self.visitados = {}
+        self.visitados = set()
 
     def add(self, nodo):
-        self.visitados.append(nodo)
+        self.visitados.add(nodo)
 
     def contains(self, nodo):
         return nodo in self.visitados
