@@ -6,10 +6,11 @@ from NodosArbol import NodosArbol
 
 
 class Algoritmo:
-    def __init__(self, nombre, problema,estrategia):
+    def __init__(self, nombre, problema,estrategia,grafo):
         self.nombre = nombre
         self.estrategia = estrategia
         self.problema = problema
+        self.grafo = grafo
 
     def __str__(self):
         return self.nombre
@@ -37,7 +38,7 @@ class Algoritmo:
                     elif (n.estrategia == "UCS"):
                         valor+= n.costo
                         
-                    sucesores = Estado.f_sucesor(n.id,n.estado.nodes_to_visit)
+                    sucesores = Estado.f_sucesor(n.estado,n.id,n.estado.nodes_to_visit)
                     for sucesor in sucesores:
                         nN = NodosArbol(n, sucesor[1], n.costo + sucesor[2], n.profundidad + 1, sucesor[0], 0, valor, self.estrategia)                      
                         fr.insertar(nN.valor,nN)

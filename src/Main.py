@@ -132,7 +132,7 @@ class XMLHandler(xml.sax.ContentHandler):
         for i in range(0, len(nodes)):
             Graph.Matrix.crearNodo(nodes[i].id, edges, matrixes)
 
-            adjacencyList.append(matrixes.copy())
+            adjacencyList.append((matrixes.copy()))
 
     def main():
         """Función que ejecuta el método principal main()
@@ -152,7 +152,7 @@ class XMLHandler(xml.sax.ContentHandler):
         #           nodes[i].lat, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
 
-        lista = [nodes[40], nodes[11], nodes[50], nodes[300]]
+        lista = [nodes[3], nodes[11], nodes[50], nodes[300]]
         idInicial = nodes[2]
         print("Id inicial: ", idInicial.id, idInicial.osm_id, idInicial.lon)
         lista.sort(key=lambda x: int(x.id))
@@ -219,11 +219,11 @@ class XMLHandler(xml.sax.ContentHandler):
 
         # print()
 
-        
+        sucesores = estado.f_sucesor(estado.id_node.id, estado.nodes_to_visit)
 
         pro = Problema("Soy un problema", estado, grafo)
 
-        algo = Algoritmo.Algoritmo("Algoritmo BFS", pro, "BFS")
+        algo = Algoritmo.Algoritmo("Algoritmo BFS", pro, "BFS",grafo)
         algo.run()
         # camino = algo.run(estado)
         # if len(camino) == 0:

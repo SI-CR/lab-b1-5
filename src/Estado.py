@@ -42,7 +42,7 @@ class Estado():
         return boolean
 
     def f_sucesor(self, id, nodes_to_visit):
-        lista = []
+
         list_ad = self.grafo.matrix
         nodos_nuevo_sucesor = []
         lista_id = []
@@ -58,20 +58,63 @@ class Estado():
         string_nodos = ""
         lista_por_si_acaso = []
         
+        acciones = []
+        accion = ""
+        nuevo_estado = None
+        estados_nuevos = []
+        costo = 0
+        costos = []
+        lista_sucesores = []
+        
+        
         for i in range(0, len(nodos_nuevo_sucesor)):
-            if nodos_nuevo_sucesor[i] in lista_id:
-                lista_por_si_acaso = lista_id.copy()
-                lista_por_si_acaso.remove(nodos_nuevo_sucesor[i])
-                string_nodos = Estado.crear_string_sucesores(self, str(nodos_nuevo_sucesor[i]), lista_por_si_acaso)
-                sucesor = "("+id+"->"+str(nodos_nuevo_sucesor[i])+"," + string_nodos + ",costo("+id+","+str(nodos_nuevo_sucesor[i])+"))"
-                lista.append(sucesor)
-                lista_por_si_acaso.clear()
-            else:
-                string_nodos = Estado.crear_string_sucesores(self, str(nodos_nuevo_sucesor[i]), lista_id)
-                sucesor = "("+id+"->"+str(nodos_nuevo_sucesor[i])+"," + string_nodos +",costo("+id+","+str(nodos_nuevo_sucesor[i])+"))"
-                lista.append(sucesor)
+            accion = id + "->" + str(nodos_nuevo_sucesor[i][0])
+            acciones.append(accion)
+            nuevo_estado = Estado(nodos_nuevo_sucesor[i], nodes_to_visit, self.grafo)
+            if nodos_nuevo_sucesor[i][0] in lista_id:
+                lista_por_si_acaso = nodes_to_visit.copy()
+                lista_por_si_acaso.remove(nuevo_estado.nodes_to_visit[lista_id.index(nodos_nuevo_sucesor[i][0])]) 
+                nuevo_estado = Estado(nodos_nuevo_sucesor[i], lista_por_si_acaso, self.grafo)
+            estados_nuevos.append(nuevo_estado)
+            costo = self.grafo.matrix[int(id)][i][1]
+            lista_sucesores.append((accion, nuevo_estado, costo))
 
-        return lista
+
+        
+
+        return lista_sucesores
+
+    # def f_sucesor(self, id, nodes_to_visit):
+    #     lista = []
+    #     list_ad = self.grafo.matrix
+    #     nodos_nuevo_sucesor = []
+    #     lista_id = []
+    #     for i in range(0, len(nodes_to_visit)):
+    #         lista_id.append(int(nodes_to_visit[i].id))
+        
+    #     for i in range(0, len(list_ad)):
+    #         if id == str(i):
+    #             nodos_nuevo_sucesor = list_ad[i]
+    #             break
+    #     # (2->3, (3,[11,40,50,300]),costo(2,3))
+
+    #     string_nodos = ""
+    #     lista_por_si_acaso = []
+        
+    #     for i in range(0, len(nodos_nuevo_sucesor)):
+    #         if nodos_nuevo_sucesor[i] in lista_id:
+    #             lista_por_si_acaso = lista_id.copy()
+    #             lista_por_si_acaso.remove(nodos_nuevo_sucesor[i])
+    #             string_nodos = Estado.crear_string_sucesores(self, str(nodos_nuevo_sucesor[i]), lista_por_si_acaso)
+    #             sucesor = "("+id+"->"+str(nodos_nuevo_sucesor[i])+"," + string_nodos + ",costo("+id+","+str(nodos_nuevo_sucesor[i])+"))"
+    #             lista.append(sucesor)
+    #             lista_por_si_acaso.clear()
+    #         else:
+    #             string_nodos = Estado.crear_string_sucesores(self, str(nodos_nuevo_sucesor[i]), lista_id)
+    #             sucesor = "("+id+"->"+str(nodos_nuevo_sucesor[i])+"," + string_nodos +",costo("+id+","+str(nodos_nuevo_sucesor[i])+"))"
+    #             lista.append(sucesor)
+
+    #     return lista
 
      
     def __str__(self):
