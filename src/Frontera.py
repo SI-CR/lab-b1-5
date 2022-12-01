@@ -22,7 +22,7 @@ class FronteraOrdenada(Frontera):
 
     
     def insertar(self,valor,nodo):
-        self.lista.put((nodo,valor))
+        self.lista.put((valor,nodo))
         
     def mostrar(self):
         
@@ -34,7 +34,7 @@ class FronteraOrdenada(Frontera):
         
     
     def extraer(self):
-        return self.lista.get()[0]
+        return self.lista.get()[1]
 
     def esVacia(self):
         return self.lista.empty()

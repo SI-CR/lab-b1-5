@@ -168,7 +168,6 @@ class XMLHandler(xml.sax.ContentHandler):
         # else:
         #     print("No se puede crear el estado, nodos incorrectos.")
 
-        
         # print("Sucesores: ", sucesores)
         # md5 = estado.convert_to_md5(string)
         # print(md5)
@@ -196,8 +195,9 @@ class XMLHandler(xml.sax.ContentHandler):
             if estado.id_node == nodes[i].id:
                 nodo = nodes[i]
                 break
-            
-        nodoArbol = NodosArbol.NodosArbol(None, estado, 0, 0, None, 0, 0, "UCS")
+
+        nodoArbol = NodosArbol.NodosArbol(
+            None, estado, 0, 0, None, 0, 0, "UCS")
         # print(nodo.id, nodo.osm_id, nodo.lon, nodo.lat)
         # estado.nodes_to_visit.sort(key=lambda x: int(x.id))
         # print(estado.id_node.id, end=" ")
@@ -222,19 +222,23 @@ class XMLHandler(xml.sax.ContentHandler):
 
         pro = Problema("Soy un problema", estado, grafo)
 
-        algo = Algoritmo.Algoritmo("Algoritmo BFS", pro, "UCS",grafo)
+        algo = Algoritmo.Algoritmo("Algoritmo UCS", pro, "UCS", grafo, 300)
         path = algo.run()
-        
-        for i in range(0, len(path)-1):
-            print(path[i].id, end=" -> ")
-        print(path[len(path)-1].id)
-        # camino = algo.run(estado)
-        # if len(camino) == 0:
-        #     print("No hay solución.")
-        # else:
-        #     for i in range(0, len(camino)-1):
-        #         print(camino[i].id, end=" -> ")
-        #     print(camino[len(camino)-1].id)
+
+        string = ""
+
+        if path != []:
+            for i in range(0, len(path)-1):
+                if path[i].padre != None and path[i].accion != None:
+                    print("["+str(path[i].id)+"]" + "["+str("{:.2f}").format(path[i].costo)+",[(" + str(path[i].estado.id_node)+", "+str(path[i].estado.show_nodes_to_visit(
+                    )) + "])|" + str(path[i].estado.id[-6:])+"],"+str(path[i].padre.id)+","+str(path[i].accion)+str(path[i].profundidad)+","+str(path[i].heuristica)+","+str("{:.2f}").format(path[i].valor)+"]")
+
+                else:
+                    print("["+str(path[i].id)+"]" + "["+str("{:.2f}").format(path[i].costo)+",[(" + str(path[i].estado.id_node)+", "+str(
+                        path[i].estado.show_nodes_to_visit()) + "])|" + str(path[i].estado.id[-6:])+"], None, None, 0,"+str("{:.2f}").format(path[i].valor)+"]")
+            print("["+str(path[len(path)-1].id)+"]" + "["+str("{:.2f}").format(path[len(path)-1].costo)+",[(" + str(path[len(path)-1].estado.id_node)+", "+str(path[len(path)-1].estado.nodes_to_visit) + "])|" + str(path[len(path)-1].estado.id[-6:])+"],"+str(path[len(path)-1].padre.id)+","+str(path[len(path)-1].accion)+str(path[len(path)-1].profundidad)+","+str(path[len(path)-1].heuristica)+","+str("{:.2f}").format(path[len(path)-1].valor)+"]")
+        else:
+            print("No se encontró solución")
 
 
 if (__name__ == "__main__"):

@@ -118,6 +118,12 @@ class Estado():
 
     #     return lista
 
+    def show_nodes_to_visit(self):
+        string = ""
+        for i in range(0, len(self.nodes_to_visit)-1):
+            string += str(self.nodes_to_visit[i].id) + ","
+        string += str(self.nodes_to_visit[len(self.nodes_to_visit)-1].id)
+        return string
      
     def __str__(self):
         return str(self.id_node) + " " + str(self.nodes_to_visit)

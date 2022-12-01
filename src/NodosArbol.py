@@ -20,18 +20,7 @@ class NodosArbol():
 
     def __lt__(self, other):
         
-        
-        if self.valor == other.valor:
-            if int(self.id) < int(other.id):
-                valor = self.valor 
-            else:
-                valor = other.valor
-                
-        if self.valor < other.valor:
-            valor = self.valor
-        else:
-            valor = other.valor
-            
+               
         return self.id < other.id
 
     def path(self):
