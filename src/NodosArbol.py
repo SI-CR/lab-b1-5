@@ -3,7 +3,7 @@ import Estado
 
 
 class NodosArbol():
-    nNodos = 0
+    nNodos = -1
 
     def __init__(self, padre, estado, costo, profundidad, accion, heuristica, valor,estrategia):
 

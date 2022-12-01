@@ -28,8 +28,8 @@ class Algoritmo:
             if Problema.goal_state(n.estado):
                 esSol = True
             else:
-                if (n.estado.id_node not in vis.visitados):
-                    vis.add(n.estado.id_node)
+                if (n.estado.id not in vis.visitados):
+                    vis.add(n.estado.id)
                     
                     if (n.estrategia == "BFS"):
                         valor = n.profundidad+1
@@ -38,7 +38,7 @@ class Algoritmo:
                     elif (n.estrategia == "UCS"):
                         valor+= n.costo
                         
-                    sucesores = Estado.f_sucesor(n.estado,n.id,n.estado.nodes_to_visit)
+                    sucesores = Estado.f_sucesor(n.estado.id_node,n.estado.nodes_to_visit,self.grafo)
                     for sucesor in sucesores:
                         nN = NodosArbol(n, sucesor[1], n.costo + sucesor[2], n.profundidad + 1, sucesor[0], 0, valor, self.estrategia)                      
                         fr.insertar(nN.valor,nN)

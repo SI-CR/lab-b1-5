@@ -152,22 +152,21 @@ class XMLHandler(xml.sax.ContentHandler):
         #           nodes[i].lat, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
 
-        lista = [nodes[3], nodes[11], nodes[50], nodes[300]]
-        idInicial = nodes[2]
+        lista = [nodes[248], nodes[528], nodes[896], nodes[1097]]
+        idInicial = nodes[37]
         print("Id inicial: ", idInicial.id, idInicial.osm_id, idInicial.lon)
         lista.sort(key=lambda x: int(x.id))
-        estado = Estado.Estado(idInicial, lista, grafo)
+        estado = Estado.Estado(idInicial.id, lista, grafo)
         # estado2 = Estado.Estado(50, lista, grafo)
         bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
 
-        if bool:
-            string = estado.crear_string(
-                estado.id_node.id, estado.nodes_to_visit)
-            print(string)
-            id = estado.convert_to_md5(string)
-            print(id)
-        else:
-            print("No se puede crear el estado, nodos incorrectos.")
+        # if bool:
+        #     string = estado.crear_string(estado.id_node, estado.nodes_to_visit)
+        #     print(string)
+        #     id = estado.convert_to_md5(string)
+        #     print(id)
+        # else:
+        #     print("No se puede crear el estado, nodos incorrectos.")
 
         
         # print("Sucesores: ", sucesores)
@@ -198,13 +197,13 @@ class XMLHandler(xml.sax.ContentHandler):
                 nodo = nodes[i]
                 break
             
-        nodoArbol = NodosArbol.NodosArbol(None, estado, 0, 0, None, 0, 0, "BFS")
+        nodoArbol = NodosArbol.NodosArbol(None, estado, 0, 0, None, 0, 0, "UCS")
         # print(nodo.id, nodo.osm_id, nodo.lon, nodo.lat)
         # estado.nodes_to_visit.sort(key=lambda x: int(x.id))
-        print(estado.id_node.id, end=" ")
-        for i in range(0, len(estado.nodes_to_visit)):
-            print(estado.nodes_to_visit[i].id, end=" ")
-        print()
+        # print(estado.id_node.id, end=" ")
+        # for i in range(0, len(estado.nodes_to_visit)):
+        #     print(estado.nodes_to_visit[i].id, end=" ")
+        # print()
 
         # print(estado.id_node.id,estado.nodes_to_visit)
         # ola = front.mostrar()
@@ -219,12 +218,16 @@ class XMLHandler(xml.sax.ContentHandler):
 
         # print()
 
-        sucesores = estado.f_sucesor(estado.id_node.id, estado.nodes_to_visit)
+        # sucesores = estado.f_sucesor(estado.id_node.id, estado.nodes_to_visit)
 
         pro = Problema("Soy un problema", estado, grafo)
 
-        algo = Algoritmo.Algoritmo("Algoritmo BFS", pro, "BFS",grafo)
-        algo.run()
+        algo = Algoritmo.Algoritmo("Algoritmo BFS", pro, "UCS",grafo)
+        path = algo.run()
+        
+        for i in range(0, len(path)-1):
+            print(path[i].id, end=" -> ")
+        print(path[len(path)-1].id)
         # camino = algo.run(estado)
         # if len(camino) == 0:
         #     print("No hay solución.")
