@@ -3,7 +3,11 @@
 import Estado
 import xml.sax
 import xml.sax.handler
+from Frontera import FronteraOrdenada
 import Graph
+import NodosArbol
+import Algoritmo
+from Problema import Problema
 
 
 # Definimos una serie de listas vacías.
@@ -75,9 +79,9 @@ class XMLHandler(xml.sax.ContentHandler):
                         cadenaFinal = cadenaFinal.split(", ")
                         cadena = cadenaFinal
                     osm_idActual = cadena
-                if stack[i] == "d8":
+                if stack[i] == "d5":
                     lonActual = stack[i+1]
-                if stack[i] == "d9":
+                if stack[i] == "d6":
                     latActual = stack[i+1]
             nodo = Graph.Node(idActual, osm_idActual, lonActual, latActual)
             nodes.append(nodo)
@@ -125,7 +129,7 @@ class XMLHandler(xml.sax.ContentHandler):
         for i in range(0, len(nodes)):
             Graph.Matrix.crearNodo(nodes[i].id, edges, matrixes)
 
-            adjacencyList.append(matrixes.copy())
+            adjacencyList.append((matrixes.copy()))
 
     def main():
         """Función que ejecuta el método principal main()
@@ -138,33 +142,50 @@ class XMLHandler(xml.sax.ContentHandler):
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
 
-        # grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
-
-        for i in range(0, len(adjacencyList)):
-            print("Id:", nodes[i].id, nodes[i].osm_id, nodes[i].lon,
-                  nodes[i].lat, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
-        lista = [40,11,50,1194]
-        idInicial = "2"
-        estado = Estado.Estado(idInicial, lista,grafo)
-        bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
-        
-        if bool:
-            string = estado.crear_string(estado.id_node, estado.nodes_to_visit)
-            id = estado.convert_to_md5(string)
-            print("Correcto.")
-        else:
-            print("No se puede crear el estado, nodos incorrectos.")
-        
-        estado.f_sucesor(idInicial, lista)
-        md5 = estado.convert_to_md5(string)
-        print(md5)
-        print(estado.__str__())
-        
-        
+        try:
+            lista = [nodes[242], nodes[817],
+                     nodes[915], nodes[1105], nodes[1202]]
+            idInicial = nodes[1163]
+        except IndexError:
+            print("Algún nodo no existe")
+            exit(1)
 
-        # for i in range(0,len(grafo.nodes)):
-        #     print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
+        string = ""
+        for i in range(0, len(lista)):
+            string += lista[i].id + " "
+        print("Id inicial:", idInicial.id, "\nIds finales:", string)
+
+        lista.sort(key=lambda x: int(x.id))
+        estado = Estado.Estado(idInicial.id, lista, grafo)
+
+        pro = Problema("Algoritmo de búsqueda", estado, grafo)
+
+        estrategia = ""
+
+        
+        opcion = int(input("¿Qué algoritmo quieres usar? (1)BFS (2)DFS (3)UCS: "))
+        while opcion < 1 or opcion > 3:
+            opcion = int(input("Opción no válida. Introduce una opción válida: "))
+            
+        if opcion == 1:
+            estrategia = "BFS"
+        elif opcion == 2:
+            estrategia = "DFS"
+        elif opcion == 3:
+            estrategia = "UCS"
+           
+        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo, 5000)
+        
+        print(pro.name+": "+algo.nombre)
+        
+        path = algo.run()
+
+        
+        if path != []:
+            NodosArbol.NodosArbol.print_path(path)
+        else:
+            print("No se encontró solución")
 
 
 if (__name__ == "__main__"):
