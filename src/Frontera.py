@@ -23,15 +23,7 @@ class FronteraOrdenada(Frontera):
     
     def insertar(self,valor,nodo):
         self.lista.put((valor,nodo))
-        
-    def mostrar(self):
-        
-        while not self.lista.empty():
-            ola = self.lista.get()
-            print(ola[0])
-            print(ola[1].estado)
-        
-        
+
     
     def extraer(self):
         return self.lista.get()[1]

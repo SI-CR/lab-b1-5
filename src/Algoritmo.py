@@ -30,7 +30,7 @@ class Algoritmo:
             if Problema.goal_state(n.estado):
                 esSol = True
             else:
-                if (n.estado.id not in vis.visitados) and n.profundidad < self.profMax:
+                if (n.estado.id not in vis.visitados) and (n.profundidad < self.profMax):
                     vis.add(n.estado.id)
 
                     sucesores = Estado.f_sucesor(n.estado.id_node, n.estado.nodes_to_visit, self.grafo)
@@ -47,7 +47,7 @@ class Algoritmo:
 
                         nN = NodosArbol(n, sucesor[1], n.costo + sucesor[2], n.profundidad + 1, sucesor[0], 0, valor, self.estrategia)
                         fr.insertar(nN.valor, nN)
-
+        
         if esSol:
             return n.path()
         else:

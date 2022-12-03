@@ -3,7 +3,7 @@ import Estado
 
 
 class NodosArbol():
-    nNodos = -1
+    nNodos = 0
 
     def __init__(self, padre, estado, costo, profundidad, accion, heuristica, valor,estrategia):
 
@@ -33,11 +33,15 @@ class NodosArbol():
             n = n.padre
 
         return camino
+    
+    def print_path(path):
+        for i in range(0, len(path)-1):
+                if path[i].padre != None and path[i].accion != None:
+                    print("["+str(path[i].id)+"]" + "["+str("{:.2f}").format(path[i].costo)+",[(" + str(path[i].estado.id_node)+",["+str(path[i].estado.show_nodes_to_visit(
+                    )) + "])|" + str(path[i].estado.id[-6:])+"],"+str(path[i].padre.id)+","+str(path[i].accion)+","+str(path[i].profundidad)+","+str(path[i].heuristica)+","+str("{:.2f}").format(path[i].valor)+"]")
+
+                else:
+                    print("["+str(path[i].id)+"]" + "["+str("{:.2f}").format(path[i].costo)+",[(" + str(path[i].estado.id_node)+",["+str(
+                        path[i].estado.show_nodes_to_visit()) + "])|" + str(path[i].estado.id[-6:])+"], None, None, 0,0,"+str("{:.2f}").format(path[i].valor)+"]")
+        print("["+str(path[len(path)-1].id)+"]" + "["+str("{:.2f}").format(path[len(path)-1].costo)+",[(" + str(path[len(path)-1].estado.id_node)+",["+str(path[len(path)-1].estado.nodes_to_visit) + "])|" + str(path[len(path)-1].estado.id[-6:])+"],"+str(path[len(path)-1].padre.id)+","+str(path[len(path)-1].accion)+","+str(path[len(path)-1].profundidad)+","+str(path[len(path)-1].heuristica)+","+str("{:.2f}").format(path[len(path)-1].valor)+"]")
         
-
-    def toString(self):
-        md5 = Estado.convert_to_md5(self.id)
-        return "["+str(self.id)+"]"+"["+str(self.costo)+","+str(md5[-6:])+","+str(self.padre)+","+str(self.accion)+","+str(self.profundidad)+","+str(self.heuristica)+","+str(self.valor)+"]"
-
-    def __str__(self):
-        return "id: "+str(self.id)+" padre: "+str(self.padre)+" estado: "+str(self.estado)+" costo: "+str(self.costo)+" profundidad: "+str(self.profundidad)+" accion: "+str(self.accion)+" heuristica: "+str(self.heuristica)+" valor: "+str(self.valor)

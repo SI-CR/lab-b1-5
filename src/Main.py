@@ -94,9 +94,6 @@ class XMLHandler(xml.sax.ContentHandler):
             idSourceActual = stack[2]
             idTargetActual = stack[3]
 
-            # if idSourceAnterior == idSourceActual and idTargetAnterior == idTargetActual:
-            #     pass
-
             if idEdgeActual != "1":
 
                 for i in range(0, len(stack)):
@@ -145,98 +142,48 @@ class XMLHandler(xml.sax.ContentHandler):
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
 
-        # grafo = Graph.Graph(nodes, edges, matrixes, adjacencyList)
-
-        # for i in range(0, len(adjacencyList)):
-        #     print("Id:", nodes[i].id, nodes[i].osm_id, nodes[i].lon,
-        #           nodes[i].lat, "Lista Adyacencia -> ", adjacencyList[i])
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
-
-        lista = [nodes[248], nodes[528], nodes[896], nodes[1097]]
-        idInicial = nodes[37]
-        print("Id inicial: ", idInicial.id, idInicial.osm_id, idInicial.lon)
-        lista.sort(key=lambda x: int(x.id))
-        estado = Estado.Estado(idInicial.id, lista, grafo)
-        # estado2 = Estado.Estado(50, lista, grafo)
-        bool = estado.check_nodes(estado.id_node, estado.nodes_to_visit, grafo)
-
-        # if bool:
-        #     string = estado.crear_string(estado.id_node, estado.nodes_to_visit)
-        #     print(string)
-        #     id = estado.convert_to_md5(string)
-        #     print(id)
-        # else:
-        #     print("No se puede crear el estado, nodos incorrectos.")
-
-        # print("Sucesores: ", sucesores)
-        # md5 = estado.convert_to_md5(string)
-        # print(md5)
-        # print(estado.__str__())
-
-        # for i in range(0,len(grafo.nodes)):
-        #print(grafo.nodes[i].id + " " + str(grafo.nodes[i].osm_id) + " " + grafo.nodes[i].lon + " " + grafo.nodes[i].lat)
-
-        # for i in range(0,len(edges)):
-        #     print(edges[i].id + " " + edges[i].source + " " + edges[i].target + " " )
-
-        # nodo1 = NodosArbol.NodosArbol(None, estado, 0, 0, None, 0, 0, "BFS")
-        # nodo = NodosArbol.NodosArbol(None, estado, 0, 0, None, 0, None, "BFS")
-        # nodo3 = NodosArbol.NodosArbol(nodo, estado, 0, 0, None, 0, 7, "BFS")
-
-        # front = FronteraOrdenada()
-
-        # front.insertar(nodo1, 10)
-        # front.insertar(nodo, 10)
-        # front.insertar(nodo3, 10)
-
-        # ola = []
-        nodo = None
-        for i in range(0, len(nodes)):
-            if estado.id_node == nodes[i].id:
-                nodo = nodes[i]
-                break
-
-        nodoArbol = NodosArbol.NodosArbol(
-            None, estado, 0, 0, None, 0, 0, "UCS")
-        # print(nodo.id, nodo.osm_id, nodo.lon, nodo.lat)
-        # estado.nodes_to_visit.sort(key=lambda x: int(x.id))
-        # print(estado.id_node.id, end=" ")
-        # for i in range(0, len(estado.nodes_to_visit)):
-        #     print(estado.nodes_to_visit[i].id, end=" ")
-        # print()
-
-        # print(estado.id_node.id,estado.nodes_to_visit)
-        # ola = front.mostrar()
-
-        # for i in range(0, front.lista._qsize()):
-        #     print(front.lista.get(i).estado.id_node)
-
-        # camino = nodo.path()
-        # for i in range(0, len(camino)-1):
-        #     print(camino[i].id, end=" -> ")
-        # print(camino[len(camino)-1].id)
-
-        # print()
-
-        # sucesores = estado.f_sucesor(estado.id_node.id, estado.nodes_to_visit)
-
-        pro = Problema("Soy un problema", estado, grafo)
-
-        algo = Algoritmo.Algoritmo("Algoritmo UCS", pro, "UCS", grafo, 300)
-        path = algo.run()
+        try:
+            lista = [nodes[242], nodes[817],
+                     nodes[915], nodes[1105], nodes[1202]]
+            idInicial = nodes[1163]
+        except IndexError:
+            print("Algún nodo no existe")
+            exit(1)
 
         string = ""
+        for i in range(0, len(lista)):
+            string += lista[i].id + " "
+        print("Id inicial:", idInicial.id, "\nIds finales:", string)
 
+        lista.sort(key=lambda x: int(x.id))
+        estado = Estado.Estado(idInicial.id, lista, grafo)
+
+        pro = Problema("Algoritmo de búsqueda", estado, grafo)
+
+        estrategia = ""
+
+        
+        opcion = int(input("¿Qué algoritmo quieres usar? (1)BFS (2)DFS (3)UCS: "))
+        while opcion < 1 or opcion > 3:
+            opcion = int(input("Opción no válida. Introduce una opción válida: "))
+            
+        if opcion == 1:
+            estrategia = "BFS"
+        elif opcion == 2:
+            estrategia = "DFS"
+        elif opcion == 3:
+            estrategia = "UCS"
+           
+        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo, 5000)
+        
+        print(pro.name+": "+algo.nombre)
+        
+        path = algo.run()
+
+        
         if path != []:
-            for i in range(0, len(path)-1):
-                if path[i].padre != None and path[i].accion != None:
-                    print("["+str(path[i].id)+"]" + "["+str("{:.2f}").format(path[i].costo)+",[(" + str(path[i].estado.id_node)+", "+str(path[i].estado.show_nodes_to_visit(
-                    )) + "])|" + str(path[i].estado.id[-6:])+"],"+str(path[i].padre.id)+","+str(path[i].accion)+str(path[i].profundidad)+","+str(path[i].heuristica)+","+str("{:.2f}").format(path[i].valor)+"]")
-
-                else:
-                    print("["+str(path[i].id)+"]" + "["+str("{:.2f}").format(path[i].costo)+",[(" + str(path[i].estado.id_node)+", "+str(
-                        path[i].estado.show_nodes_to_visit()) + "])|" + str(path[i].estado.id[-6:])+"], None, None, 0,"+str("{:.2f}").format(path[i].valor)+"]")
-            print("["+str(path[len(path)-1].id)+"]" + "["+str("{:.2f}").format(path[len(path)-1].costo)+",[(" + str(path[len(path)-1].estado.id_node)+", "+str(path[len(path)-1].estado.nodes_to_visit) + "])|" + str(path[len(path)-1].estado.id[-6:])+"],"+str(path[len(path)-1].padre.id)+","+str(path[len(path)-1].accion)+str(path[len(path)-1].profundidad)+","+str(path[len(path)-1].heuristica)+","+str("{:.2f}").format(path[len(path)-1].valor)+"]")
+            NodosArbol.NodosArbol.print_path(path)
         else:
             print("No se encontró solución")
 
