@@ -9,11 +9,11 @@ class Graph:
 
 
 class Node:
-    def __init__(self, id,osm_id,lon,lat):
+    def __init__(self, id,osm_id,y,x):
         self.id = id
         self.osm_id = osm_id
-        self.lon = lon
-        self.lat = lat
+        self.y = y
+        self.x = x
 
 
 class Edge:

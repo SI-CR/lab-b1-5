@@ -1,3 +1,4 @@
+from math import sqrt
 import Estado
 # para hacer Nodo.nnodos
 
@@ -34,6 +35,11 @@ class NodosArbol():
 
         return camino
     
+    
+    
+        
+        
+        
     def print_path(path):
         for i in range(0, len(path)-1):
                 if path[i].padre != None and path[i].accion != None:

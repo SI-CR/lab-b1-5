@@ -65,8 +65,8 @@ class XMLHandler(xml.sax.ContentHandler):
 
         if tag == "node":
 
-            lonActual = ""
-            latActual = ""
+            yActual = ""
+            xActual = ""
             osm_idActual = ""
             idActual = stack[1]
             for i in range(0, len(stack)):
@@ -80,10 +80,10 @@ class XMLHandler(xml.sax.ContentHandler):
                         cadena = cadenaFinal
                     osm_idActual = cadena
                 if stack[i] == "d5":
-                    lonActual = stack[i+1]
+                    yActual = stack[i+1]
                 if stack[i] == "d6":
-                    latActual = stack[i+1]
-            nodo = Graph.Node(idActual, osm_idActual, lonActual, latActual)
+                    xActual = stack[i+1]
+            nodo = Graph.Node(idActual, osm_idActual, yActual, xActual)
             nodes.append(nodo)
 
             stack.clear()
@@ -144,9 +144,9 @@ class XMLHandler(xml.sax.ContentHandler):
 
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
         try:
-            lista = [nodes[242], nodes[817],
-                     nodes[915], nodes[1105], nodes[1202]]
-            idInicial = nodes[1163]
+            lista = [nodes[248], nodes[528],
+                     nodes[896], nodes[1097]]
+            idInicial = nodes[37]
         except IndexError:
             print("Algún nodo no existe")
             exit(1)
@@ -155,33 +155,37 @@ class XMLHandler(xml.sax.ContentHandler):
         for i in range(0, len(lista)):
             string += lista[i].id + " "
         print("Id inicial:", idInicial.id, "\nIds finales:", string)
-
         lista.sort(key=lambda x: int(x.id))
+
         estado = Estado.Estado(idInicial.id, lista, grafo)
+
+        # min_lista = NodosArbol.NodosArbol.func_heuristica(estado, True)
+        # print("Heuristica:", min_lista)
 
         pro = Problema("Algoritmo de búsqueda", estado, grafo)
 
         estrategia = ""
 
-        
-        opcion = int(input("¿Qué algoritmo quieres usar? (1)BFS (2)DFS (3)UCS: "))
+        opcion = int(
+            input("¿Qué algoritmo quieres usar? (1)BFS (2)DFS (3)UCS: "))
         while opcion < 1 or opcion > 3:
-            opcion = int(input("Opción no válida. Introduce una opción válida: "))
-            
+            opcion = int(
+                input("Opción no válida. Introduce una opción válida: "))
+
         if opcion == 1:
             estrategia = "BFS"
         elif opcion == 2:
             estrategia = "DFS"
         elif opcion == 3:
             estrategia = "UCS"
-           
-        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo, 5000)
-        
+
+        algo = Algoritmo.Algoritmo(
+            ("Algoritmo "+estrategia), pro, estrategia, grafo, 5000)
+
         print(pro.name+": "+algo.nombre)
-        
+
         path = algo.run()
 
-        
         if path != []:
             NodosArbol.NodosArbol.print_path(path)
         else:
