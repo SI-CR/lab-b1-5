@@ -25,24 +25,6 @@ class Estado():
         string = ("("+str(id_node)+",["+string_nodos+"])").strip()
         return string
     
-    def crear_string_sucesores(self, id_node, nodes_to_visit):
-        string_nodos = ""
-        for i in range(0, len(nodes_to_visit)-1):
-            string_nodos += str(nodes_to_visit[i]) + ","
-        string_nodos += str(nodes_to_visit[len(nodes_to_visit)-1])
-        string = ("("+id_node+",["+string_nodos+"])").strip()
-        return string
-
-    def check_nodes(self, id_node, nodes_to_visit, graph):
-        boolean = True
-        if int(id_node) > len(graph.nodes)-1:
-            boolean = False
-
-        for i in range(0, len(nodes_to_visit)):
-            if int(nodes_to_visit[i].id) > len(graph.nodes) - 1:
-                boolean = False
-        return boolean
-
     def f_sucesor(id, nodes_to_visit,grafo):
 
         list_ad = grafo.matrix
