@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+import signal
+from time import sleep
 import Estado
 import xml.sax
 import xml.sax.handler
@@ -17,6 +19,12 @@ edges = []
 matrixes = []
 adjacencyList = []
 
+def handler(signum, frame):
+    print("\n[!] Se ha pulsado Ctrl+C\nSaliendo del programa...")
+    sleep(1)
+    exit(1)
+
+signal.signal(signal.SIGINT, handler)
 
 class XMLHandler(xml.sax.ContentHandler):
     def __init__(self):
@@ -65,8 +73,8 @@ class XMLHandler(xml.sax.ContentHandler):
 
         if tag == "node":
 
-            lonActual = ""
-            latActual = ""
+            yActual = ""
+            xActual = ""
             osm_idActual = ""
             idActual = stack[1]
             for i in range(0, len(stack)):
@@ -80,10 +88,10 @@ class XMLHandler(xml.sax.ContentHandler):
                         cadena = cadenaFinal
                     osm_idActual = cadena
                 if stack[i] == "d5":
-                    lonActual = stack[i+1]
+                    yActual = stack[i+1]
                 if stack[i] == "d6":
-                    latActual = stack[i+1]
-            nodo = Graph.Node(idActual, osm_idActual, lonActual, latActual)
+                    xActual = stack[i+1]
+            nodo = Graph.Node(idActual, osm_idActual, yActual, xActual)
             nodes.append(nodo)
 
             stack.clear()
@@ -131,9 +139,71 @@ class XMLHandler(xml.sax.ContentHandler):
 
             adjacencyList.append((matrixes.copy()))
 
-    def main():
-        """Función que ejecuta el método principal main()
-        """
+    def menu():
+        opcion = int(
+            input("¿Qué algoritmo quieres usar? (1)BFS (2)DFS (3)UCS (4)A* (5)Voraz: "))
+        while opcion < 1 or opcion > 5:
+            opcion = int(
+                input("Opción no válida. Introduce una opción válida: "))
+
+        if opcion == 1:
+            estrategia = "BFS"
+        elif opcion == 2:
+            estrategia = "DFS"
+        elif opcion == 3:
+            estrategia = "UCS"
+        elif opcion == 4:
+            estrategia = "A*"
+        elif opcion == 5:
+            estrategia = "Voraz"
+        return estrategia
+    
+    def mostrar_inicio(idInicial, lista):
+        string = ""
+        for i in range(0, len(lista)):
+            string += lista[i].id + " "
+        print("Id inicial:", idInicial.id, "\nIds finales:", string)
+
+    def pedir_inicio():
+        
+        print("BIENVENIDO AL PROGRAMA DE ESTRATEGIAS DE BÚSQUEDA")
+        sleep(1)
+        lista = []
+        nLista = int(input("¿Cuántos nodos a visitar quiere? "))
+        id_inicial = int(input("Introduce el id del nodo inicial: "))
+        try:
+            id_inicial = nodes[id_inicial]
+        except IndexError:
+            print("El nodo no existe")
+            exit(1)
+        for i in range(0, nLista):
+            node_id = int(input("Introduce el id del nodo a visitar: "))
+            try:
+                lista.append(nodes[node_id])
+            except IndexError:
+                print("El nodo no existe")
+                exit(1)
+        
+        
+        return id_inicial, lista
+
+    def run(estado, grafo):
+        pro = Problema("Algoritmo de búsqueda", estado, grafo)
+
+        estrategia = XMLHandler.menu()
+
+        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo, 1000)
+
+        print(pro.name+": "+algo.nombre)
+
+        path = algo.run()
+
+        if path != []:
+            NodosArbol.NodosArbol.print_path(path)
+        else:
+            print("No se encontró solución")
+
+    def generar_grafo():
         parseador = xml.sax.make_parser()
         manejador = XMLHandler()
         parseador.setContentHandler(manejador)
@@ -143,49 +213,22 @@ class XMLHandler(xml.sax.ContentHandler):
         XMLHandler.crearMatriz(nodes, edges)
 
         grafo = Graph.Graph("Grafo Ciu", nodes, edges, adjacencyList)
-        try:
-            lista = [nodes[242], nodes[817],
-                     nodes[915], nodes[1105], nodes[1202]]
-            idInicial = nodes[1163]
-        except IndexError:
-            print("Algún nodo no existe")
-            exit(1)
+        return grafo
 
-        string = ""
-        for i in range(0, len(lista)):
-            string += lista[i].id + " "
-        print("Id inicial:", idInicial.id, "\nIds finales:", string)
+    def main():
+        """Función que ejecuta el método principal main()
+        """
+        grafo = XMLHandler.generar_grafo()
 
+        idInicial, lista = XMLHandler.pedir_inicio()
+        
+        XMLHandler.mostrar_inicio(idInicial, lista)
+        
         lista.sort(key=lambda x: int(x.id))
         estado = Estado.Estado(idInicial.id, lista, grafo)
 
-        pro = Problema("Algoritmo de búsqueda", estado, grafo)
+        XMLHandler.run(estado, grafo)
 
-        estrategia = ""
-
-        
-        opcion = int(input("¿Qué algoritmo quieres usar? (1)BFS (2)DFS (3)UCS: "))
-        while opcion < 1 or opcion > 3:
-            opcion = int(input("Opción no válida. Introduce una opción válida: "))
-            
-        if opcion == 1:
-            estrategia = "BFS"
-        elif opcion == 2:
-            estrategia = "DFS"
-        elif opcion == 3:
-            estrategia = "UCS"
-           
-        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo, 5000)
-        
-        print(pro.name+": "+algo.nombre)
-        
-        path = algo.run()
-
-        
-        if path != []:
-            NodosArbol.NodosArbol.print_path(path)
-        else:
-            print("No se encontró solución")
 
 
 if (__name__ == "__main__"):
