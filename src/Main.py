@@ -191,8 +191,14 @@ class XMLHandler(xml.sax.ContentHandler):
         pro = Problema("Algoritmo de búsqueda", estado, grafo)
 
         estrategia = XMLHandler.menu()
+        
+        heur = int(input("Qué heurística quieres usar? (1)Distancia euclídea (2)Arco mínimo: "))
+        if heur == 1:
+            heur = "Euclidea"
+        elif heur == 2:
+            heur = "Arco"
 
-        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo, 1000)
+        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo,heur, 1000)
 
         print(pro.name+": "+algo.nombre)
 
@@ -207,7 +213,7 @@ class XMLHandler(xml.sax.ContentHandler):
         parseador = xml.sax.make_parser()
         manejador = XMLHandler()
         parseador.setContentHandler(manejador)
-        ruta = "/home/oem/Desktop/Universidad/LabInteligentes/LabGitHub/lab-b1-5/Grafos/CR_Capital.graphML"
+        ruta = "./Grafos/nuevo.graphML"
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)
