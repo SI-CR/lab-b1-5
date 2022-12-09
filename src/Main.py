@@ -2,14 +2,14 @@
 
 import signal
 from time import sleep
-import Estado
+
 import xml.sax
 import xml.sax.handler
-from Frontera import FronteraOrdenada
 import Graph
 import NodosArbol
 import Algoritmo
 from Problema import Problema
+import Estado
 
 
 # Definimos una serie de listas vacías.
@@ -80,6 +80,7 @@ class XMLHandler(xml.sax.ContentHandler):
             for i in range(0, len(stack)):
 
                 if stack[i] == "d4":
+                    
                     cadena = stack[i + 1]
                     if cadena[0] == "[":
 
@@ -87,6 +88,7 @@ class XMLHandler(xml.sax.ContentHandler):
                         cadenaFinal = cadenaFinal.split(", ")
                         cadena = cadenaFinal
                     osm_idActual = cadena
+
                 if stack[i] == "d5":
                     yActual = stack[i+1]
                 if stack[i] == "d6":
@@ -198,7 +200,7 @@ class XMLHandler(xml.sax.ContentHandler):
         elif heur == 2:
             heur = "Arco"
 
-        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo,heur, 1000)
+        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo,heur, 200)
 
         print(pro.name+": "+algo.nombre)
 
@@ -213,7 +215,7 @@ class XMLHandler(xml.sax.ContentHandler):
         parseador = xml.sax.make_parser()
         manejador = XMLHandler()
         parseador.setContentHandler(manejador)
-        ruta = "./Grafos/nuevo.graphML"
+        ruta = "Grafos/nuevo.graphxml.xml"
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)

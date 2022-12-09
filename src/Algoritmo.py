@@ -69,14 +69,18 @@ class Algoritmo:
         vis = Visitados()
         esSol = False
         A1 = Algoritmo.min_long(self.grafo)
-        if self.estrategia == "A*" or self.estrategia == "Voraz":
+        if self.estrategia == "A*" and self.heur == "Arco":
             valor = A1 * len(self.problema.ini_state.nodes_to_visit)
-        else:
-            valor = 0
+        elif self.estrategia == "A*" and self.heur == "Euclidea":
+            valor = min(Algoritmo.min_heur(self.problema.ini_state),Algoritmo.sec_heur(self.problema.ini_state,self.grafo)) * len(self.problema.ini_state.nodes_to_visit)
+        elif self.estrategia == "Voraz" and self.heur == "Arco":
+            valor = A1 * len(self.problema.ini_state.nodes_to_visit)
+        elif self.estrategia == "Voraz" and self.heur == "Euclidea":
+            valor = min(Algoritmo.min_heur(self.problema.ini_state),Algoritmo.sec_heur(self.problema.ini_state,self.grafo)) * len(self.problema.ini_state.nodes_to_visit)
             
         
             
-        n = NodosArbol(None, self.problema.ini_state, 0, 0, None, round(A1*len(self.problema.ini_state.nodes_to_visit),2), round(valor,2), self.estrategia)
+        n = NodosArbol(None, self.problema.ini_state, 0, 0, None, round(valor,2), round(valor,2), self.estrategia)
         
         if self.heur == "Euclidea":
             D1 = Algoritmo.min_heur(self.problema.ini_state)
