@@ -68,6 +68,7 @@ class Algoritmo:
         fr = FronteraOrdenada()
         vis = Visitados()
         esSol = False
+        valor = 0
         A1 = Algoritmo.min_long(self.grafo)
         if self.estrategia == "A*" and self.heur == "Arco":
             valor = A1 * len(self.problema.ini_state.nodes_to_visit)
