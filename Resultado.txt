@@ -1,0 +1,5 @@
+BIENVENIDO AL PROGRAMA DE ESTRATEGIAS DE BÚSQUEDA
+¿Cuántos nodos a visitar quiere? Introduce el id del nodo inicial: Introduce el id del nodo a visitar: Introduce el id del nodo a visitar: Introduce el id del nodo a visitar: Id inicial: 144 
+Ids finales: 123 14 35 
+¿Qué algoritmo quieres usar? (1)BFS (2)DFS (3)UCS (4)A* (5)Voraz: Qué heurística quieres usar? (1)Distancia euclídea (2)Arco mínimo: Algoritmo de búsqueda: Algoritmo BFS
+No se encontró solución
