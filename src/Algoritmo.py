@@ -125,6 +125,7 @@ class Algoritmo:
                             else:
                                 valor = min(D1,Algoritmo.sec_heur(sucesor[1],self.grafo)) * len(sucesor[1].nodes_to_visit)
                          
+                         
                         if self.heur == "Arco":
                             nN = NodosArbol(n, sucesor[1], n.costo + sucesor[2], n.profundidad + 1, sucesor[0], round(A1*len(sucesor[1].nodes_to_visit),2), round(valor,2), self.estrategia) 
                         else: 

@@ -7,13 +7,15 @@ class Estado():
 #Meter aquí el grafo como variable de clase y actualizarlo
     def __init__(self, id_node,nodes_to_visit, grafo):
         self.grafo = grafo
-        self.id = Estado.convert_to_md5(self, Estado.crear_string(self, id_node, nodes_to_visit))
+        self.id = Estado.convert_to_md5(self, Estado.crear_string(self, id_node, nodes_to_visit),id_node)
         self.nodes_to_visit = nodes_to_visit
         self.id_node = id_node        
        
 
-    def convert_to_md5(self, string):
+    def convert_to_md5(self, string,id_node):
         id = hashlib.md5(string.encode()).hexdigest()
+        if id[-6:] == "486eff":
+            print("ID: "+id+ "\n")
         return id
 
     def crear_string(self, id_node, nodes_to_visit):
