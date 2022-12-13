@@ -97,6 +97,9 @@ class Algoritmo:
                 esSol = True
             else:
                 if (n.estado.id not in vis.visitados) and (n.profundidad < self.profMax):
+                    if n.estado.id[-6:] == "9b8480":
+                        print(round(n.costo,2)) 
+                        
                     vis.add(n.estado.id)
                     
                     sucesores = Estado.f_sucesor(
