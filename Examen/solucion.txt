@@ -1,0 +1,6 @@
+el estado a encontrar el id, era (1296,[258,298,675,785,1294])
+No supe sacar el coste
+
+profundidad = 60
+
+id ultimo nodo = 55775

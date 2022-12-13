@@ -198,7 +198,7 @@ class XMLHandler(xml.sax.ContentHandler):
         elif heur == 2:
             heur = "Arco"
 
-        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo,heur, 1000)
+        algo = Algoritmo.Algoritmo(("Algoritmo "+estrategia), pro, estrategia, grafo,heur, 600)
 
         print(pro.name+": "+algo.nombre)
 
@@ -206,6 +206,7 @@ class XMLHandler(xml.sax.ContentHandler):
 
         if path != []:
             NodosArbol.NodosArbol.print_path(path)
+            
         else:
             print("No se encontró solución")
 
@@ -213,7 +214,7 @@ class XMLHandler(xml.sax.ContentHandler):
         parseador = xml.sax.make_parser()
         manejador = XMLHandler()
         parseador.setContentHandler(manejador)
-        ruta = "./Grafos/nuevo.graphML"
+        ruta = "./Grafos/nuevo.graphxml"
 
         parseador.parse(ruta)
         XMLHandler.crearMatriz(nodes, edges)

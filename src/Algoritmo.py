@@ -44,7 +44,7 @@ class Algoritmo:
         return min(D1)
     
     def sec_heur(estado,grafo):
-        
+        #Distancia euclidea, heuristica, distancia entre el nodo actual y el nodo mas cercano al final de la ruta que no ha sido visitado 
         nodo = None
         D2 = []
         for i in range(0, len(grafo.nodes)):
