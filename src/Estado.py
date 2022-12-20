@@ -13,10 +13,7 @@ class Estado():
        
 
     def convert_to_md5(self, string):
-        idpor = string
         id = hashlib.md5(string.encode()).hexdigest()
-        if((id[-6:]) == "ad8094"):
-            print(idpor, idpor.coste)
         return id
 
     def crear_string(self, id_node, nodes_to_visit):

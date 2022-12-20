@@ -19,6 +19,7 @@ edges = []
 matrixes = []
 adjacencyList = []
 
+
 def handler(signum, frame):
     print("\n[!] Se ha pulsado Ctrl+C\nSaliendo del programa...")
     sleep(1)
@@ -61,15 +62,13 @@ class XMLHandler(xml.sax.ContentHandler):
 
             key = attrs["key"]
             stack.append(key)
-
+        
     def endElement(self, tag):
         """Lee la etiqueta de cierre y elimina los elementos de la pila si se ha creado ya el objeto.
 
         Args:
             tag (String): Identifica si es el cierre de un nodo, edge o data
         """
-
-        # Definición de variables.
 
         if tag == "node":
 
@@ -82,7 +81,6 @@ class XMLHandler(xml.sax.ContentHandler):
                 if stack[i] == "d4":
                     cadena = stack[i + 1]
                     if cadena[0] == "[":
-
                         cadenaFinal = cadena[1:len(cadena) - 1]
                         cadenaFinal = cadenaFinal.split(", ")
                         cadena = cadenaFinal
@@ -235,8 +233,6 @@ class XMLHandler(xml.sax.ContentHandler):
         estado = Estado.Estado(idInicial.id, lista, grafo)
 
         XMLHandler.run(estado, grafo)
-
-
 
 if (__name__ == "__main__"):
     XMLHandler.main()

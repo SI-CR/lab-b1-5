@@ -85,15 +85,24 @@ class Algoritmo:
 
         while not esSol and not fr.esVacia():
             n = fr.extraer()
-            # heu = A1 * len(n.estado.nodes_to_visit)
-            
+
             if Problema.goal_state(n.estado):
-                
+
                 esSol = True
             else:
                 if (n.estado.id not in vis.visitados) and (n.profundidad < self.profMax):
                     vis.add(n.estado.id)
-                    
+
+                    if((n.estado.id[-6:] ) == "714170" ):
+                        print("profundidad:",n.profundidad)
+                    elif((n.estado.id[-6:] ) == "f55209" ):
+                        print("profundidad:",n.profundidad)
+                    elif((n.estado.id[-6:] ) == "ae408a" ):
+                        print("profundidad:",n.profundidad)
+                    elif((n.estado.id[-6:] ) == "707f49" ):
+                        print("profundidad:",n.profundidad)
+
+
                     sucesores = Estado.f_sucesor(
                         n.estado.id_node, n.estado.nodes_to_visit, self.grafo)
                     valor = 0  
