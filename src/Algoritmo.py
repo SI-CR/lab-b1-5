@@ -97,6 +97,20 @@ class Algoritmo:
                 esSol = True
             else:
                 if (n.estado.id not in vis.visitados) and (n.profundidad < self.profMax):
+                    
+                    if(n.estado.id[-6:] == "d4f8ec"):
+                        print("Estado: d4f8ec una profundidad de: " + str(n.profundidad))
+                    
+                    if(n.estado.id[-6:] == "32b2f0"):
+                        print("Estado: 32b2f0 una profundidad de: " + str(n.profundidad))
+                    
+                    if(n.estado.id[-6:] == "c41674"):
+                        print("Estado: c41674 una profundidad de: " + str(n.profundidad))
+                    
+                    if(n.estado.id[-6:] == "49f4e0"):
+                        print("Estado: 49f4e0 una profundidad de: " + str(n.profundidad))
+                    
+                    
                     vis.add(n.estado.id)
                     
                     sucesores = Estado.f_sucesor(
